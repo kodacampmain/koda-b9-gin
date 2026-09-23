@@ -4,7 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitMainRouter(mainRouter *gin.Engine) {
+func InitMainRouter(router *gin.Engine) {
 
-	initPingRouter(mainRouter)
+	initPingRouter(router)
+	initHeaderRouter(router)
 }
