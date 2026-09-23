@@ -1,18 +1,47 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"github.com/kodacampmain/koda-b9-gin/internal/config"
 	"github.com/kodacampmain/koda-b9-gin/internal/router"
 )
 
 // type Response map[string]any
 
 func main() {
+	// load env seawal mungkin
+	if err := godotenv.Load(); err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	// connect ke DB
+	pdb := config.NewPsqlDb(os.Getenv("DBUSER"), os.Getenv("DBPASS"), os.Getenv("DBHOST"), os.Getenv("DBPORT"), os.Getenv("DBNAME"))
+	pool, err := pdb.Connect()
+	if err != nil {
+		log.Println("Cannot Connect to DB\nReason: ", err.Error())
+		return
+	}
+	defer pool.Close()
+
+	if err := pool.Ping(context.Background()); err != nil {
+		log.Println("Database is not ready\nReason: ", err.Error())
+		return
+	}
+
+	log.Println("Database Ready")
+
 	// Generate gin Engine
 	r := gin.Default()
+
 	// Deklarasi Router (endpoint & method HTTP)
+	router.InitMainRouter(r, pool)
 
-	router.InitMainRouter(r)
-
-	r.Run("localhost:9000")
+	r.Run(fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT")))
 }
