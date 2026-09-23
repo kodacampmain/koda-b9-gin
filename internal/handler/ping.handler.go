@@ -24,11 +24,14 @@ func NewPingHandler(ps IPingService) *PingHandler {
 	}
 }
 
+// func (p *PingHandler) Pong(ps *service.PingService) gin.HandlerFunc {
 func (p *PingHandler) Pong(c *gin.Context) {
 	// Send Response
+	// return func(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "pong",
 	})
+	// }
 }
 
 func (p *PingHandler) Greet(ctx *gin.Context) {

@@ -13,6 +13,7 @@ func initPingRouter(r *gin.Engine) {
 	// psn := service.NewPingServiceNew()
 	ph := handler.NewPingHandler(ps)
 
+	// gin.HandlerFunc
 	pingRouter.GET("", ph.Pong)
 	pingRouter.POST("", ph.Greet)
 	// pingRouter.PATCH("")
