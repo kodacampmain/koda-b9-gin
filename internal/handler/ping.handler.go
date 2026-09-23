@@ -28,6 +28,7 @@ func NewPingHandler(ps IPingService) *PingHandler {
 func (p *PingHandler) Pong(c *gin.Context) {
 	// Send Response
 	// return func(c *gin.Context) {
+	// c.Header("Access-Control-Allow-Origin", "http://localhost:5501")
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "pong",
 	})
