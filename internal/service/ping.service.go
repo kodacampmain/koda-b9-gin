@@ -6,7 +6,7 @@ import (
 	"github.com/kodacampmain/koda-b9-gin/internal/dto"
 )
 
-var Users = []dto.Account{}
+var Users = []dto.UserAccount{}
 
 type PingService struct{}
 

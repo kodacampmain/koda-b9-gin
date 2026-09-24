@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/kodacampmain/koda-b9-gin/internal/handler"
+	"github.com/kodacampmain/koda-b9-gin/internal/middleware"
 	"github.com/kodacampmain/koda-b9-gin/internal/repo"
 	"github.com/kodacampmain/koda-b9-gin/internal/service"
 )
@@ -15,5 +16,5 @@ func initPersonRouter(r *gin.Engine, db *pgxpool.Pool) {
 	ps := service.NewPersonService(pr)
 	ph := handler.NewPersonHandler(ps)
 
-	personRouter.GET("", ph.GetAllPerson)
+	personRouter.GET("", middleware.CheckToken, middleware.AdminOnly, ph.GetAllPerson)
 }

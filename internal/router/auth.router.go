@@ -7,14 +7,22 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/kodacampmain/koda-b9-gin/internal/dto"
+	"github.com/kodacampmain/koda-b9-gin/internal/handler"
+	"github.com/kodacampmain/koda-b9-gin/internal/repo"
+	"github.com/kodacampmain/koda-b9-gin/internal/service"
 	"github.com/kodacampmain/koda-b9-gin/pkg"
 )
 
-func initAuthRouter(r *gin.Engine) {
+func initAuthRouter(r *gin.Engine, db *pgxpool.Pool) {
 	authRouter := r.Group("/auth")
 
-	authRouter.POST("/pwd", func(ctx *gin.Context) {
+	ar := repo.NewAuthRepo(db)
+	as := service.NewAuthService(ar)
+	ah := handler.NewAuthHandler(as)
+
+	authRouter.POST("pwd", func(ctx *gin.Context) {
 		type body struct {
 			Password string `json:"pwd"`
 		}
@@ -42,7 +50,7 @@ func initAuthRouter(r *gin.Engine) {
 		})
 	})
 
-	authRouter.POST("/compare", func(ctx *gin.Context) {
+	authRouter.POST("compare", func(ctx *gin.Context) {
 		type body struct {
 			Password string `json:"pwd"`
 			Hash     string `json:"hash"`
@@ -82,4 +90,7 @@ func initAuthRouter(r *gin.Engine) {
 			Msg:     "password betul",
 		})
 	})
+
+	authRouter.POST("new", ah.Register)
+	authRouter.POST("", ah.Login)
 }

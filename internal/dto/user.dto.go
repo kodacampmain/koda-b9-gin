@@ -6,7 +6,7 @@ type User struct {
 	Age  int8   `json:"umur" form:"umur"`
 }
 
-type Account struct {
+type UserAccount struct {
 	Email    string
 	Password string
 }
