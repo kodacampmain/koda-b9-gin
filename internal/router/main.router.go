@@ -14,4 +14,5 @@ func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
 	initPingRouter(router)
 	initHeaderRouter(router)
 	initPersonRouter(router, db)
+	initAuthRouter(router)
 }
