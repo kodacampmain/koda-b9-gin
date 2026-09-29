@@ -25,6 +25,7 @@ func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
 	initHeaderRouter(router)
 	initPersonRouter(router, db)
 	initAuthRouter(router, db)
+	initMoviesRouter(router, db)
 
 	router.PATCH("edit", func(ctx *gin.Context) {
 		var body dto.EditUser
