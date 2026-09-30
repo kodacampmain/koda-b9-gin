@@ -10,8 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/kodacampmain/koda-b9-gin/docs"
 	"github.com/kodacampmain/koda-b9-gin/internal/dto"
 	"github.com/kodacampmain/koda-b9-gin/internal/middleware"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
@@ -20,6 +23,9 @@ func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
 	router.Use(middleware.Cors)
 
 	router.Static("img", path.Join("public", "img"))
+	// router.Static("docs", path.Join("public", "docs"))
+
+	router.GET("documentation/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	initPingRouter(router)
 	initHeaderRouter(router)

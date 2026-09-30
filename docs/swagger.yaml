@@ -1,0 +1,89 @@
+basePath: /
+definitions:
+  dto.ErrorResponse:
+    properties:
+      data: {}
+      msg:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.Response:
+    properties:
+      data: {}
+      msg:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.User:
+    properties:
+      nama:
+        description: property datatype struct_tag
+        type: string
+      umur:
+        type: integer
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: Demonstration about backend during Koda Bootcamp
+  title: Koda B9 Gin
+  version: "1.0"
+paths:
+  /person:
+    get:
+      description: Get all person data from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerToken: []
+      summary: Getting All Person Data
+      tags:
+      - person
+  /ping:
+    post:
+      consumes:
+      - application/json
+      description: Send Greeting to name from body
+      parameters:
+      - description: body to greet
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Send Greeting
+      tags:
+      - ping
+securityDefinitions:
+  BearerToken:
+    description: Bearer Token used as identity for accessing backend
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

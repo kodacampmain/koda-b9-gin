@@ -20,6 +20,6 @@ func initPingRouter(r *gin.Engine) {
 	// route middleware
 	// router.GET("", mid1, mid2, handler)
 	pingRouter.GET("", ph.Pong)
-	pingRouter.PATCH("", ph.Greet)
+	pingRouter.POST("", ph.Greet)
 	// pingRouter.PATCH("")
 }

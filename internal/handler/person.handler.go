@@ -19,11 +19,21 @@ func NewPersonHandler(ps *service.PersonService) *PersonHandler {
 	}
 }
 
+// GetAllPerson
+//
+// @Summary			Getting All Person Data
+// @Description		Get all person data from database
+// @Tags			person
+// @Produce			json
+// @Router			/person	[get]
+// @Security		BearerToken
+// @Success			200		{object}	dto.Response
+// @Failure			500		{object}	dto.ErrorResponse
 func (p *PersonHandler) GetAllPerson(c *gin.Context) {
 	persons, err := p.ps.GetAllPerson(c.Request.Context())
 	if err != nil {
 		log.Println("error: ", err.Error())
-		c.JSON(http.StatusInternalServerError, dto.Response{
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
 			Success: false,
 			Msg:     "terjadi kesalahan sistem",
 		})

@@ -12,8 +12,17 @@ import (
 	"github.com/kodacampmain/koda-b9-gin/internal/router"
 )
 
-// type Response map[string]any
+// @title						Koda B9 Gin
+// @version						1.0
+// @description					Demonstration about backend during Koda Bootcamp
 
+// @host						localhost:9000
+// @BasePath					/
+
+// @securityDefinitions.apikey	BearerToken
+// @in							header
+// @name						Authorization
+// @description					Bearer Token used as identity for accessing backend
 func main() {
 	// load env seawal mungkin
 	if err := godotenv.Load(); err != nil {
