@@ -4,24 +4,30 @@ definitions:
     properties:
       data: {}
       msg:
+        example: berhasil
         type: string
       success:
+        example: false
         type: boolean
     type: object
   dto.Response:
     properties:
       data: {}
       msg:
+        example: berhasil
         type: string
       success:
+        example: true
         type: boolean
     type: object
   dto.User:
     properties:
       nama:
         description: property datatype struct_tag
+        example: given
         type: string
       umur:
+        example: 20
         type: integer
     type: object
 host: localhost:9000

@@ -99,10 +99,12 @@ const docTemplate = `{
             "properties": {
                 "data": {},
                 "msg": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "berhasil"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -111,10 +113,12 @@ const docTemplate = `{
             "properties": {
                 "data": {},
                 "msg": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "berhasil"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
@@ -123,10 +127,12 @@ const docTemplate = `{
             "properties": {
                 "nama": {
                     "description": "property datatype struct_tag",
-                    "type": "string"
+                    "type": "string",
+                    "example": "given"
                 },
                 "umur": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 20
                 }
             }
         }
