@@ -33,38 +33,53 @@ func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
 	initAuthRouter(router, db)
 	initMoviesRouter(router, db)
 
-	router.PATCH("edit", func(ctx *gin.Context) {
-		var body dto.EditUser
-		if err := ctx.ShouldBindWith(&body, binding.FormMultipart); err != nil {
-			log.Println(err.Error())
-			ctx.JSON(http.StatusInternalServerError, dto.Response{
-				Success: false,
-				Msg:     "terjadi kesalahan sistem",
-			})
-			return
-		}
+	router.PATCH("edit", editUser)
+}
 
-		log.Println("size", body.Image.Size)
-
-		// validasi ekstensi (jpg, jpeg, png)
-		// validasi ukuran (ex. max 2MB)
-
-		filename := fmt.Sprintf("%d_%s%s", time.Now().UnixNano(), body.Name, path.Ext(body.Image.Filename))
-		filepath := path.Join("public", "img", filename)
-
-		if err := ctx.SaveUploadedFile(body.Image, filepath); err != nil {
-			log.Println(err.Error())
-			ctx.JSON(http.StatusInternalServerError, dto.Response{
-				Success: false,
-				Msg:     "terjadi kesalahan sistem",
-			})
-			return
-		}
-		ctx.JSON(http.StatusOK, dto.Response{
-			Success: true,
-			Data: gin.H{
-				"filepath": fmt.Sprintf("img/%s", filename),
-			},
+// Edit User
+//
+// @Summary			Update user info
+// @Description		Update user info with name and image
+// @Tags			user
+// @Accept			mpfd
+// @Produce			json
+// @Router			/edit	[patch]
+// @Param			name	formData	string	true	"name to update user"
+// @Param			image	formData	file	true	"image to update user"
+// @Success			200		{object}	dto.Response
+// @Failure			400		{object}	dto.ErrorResponse
+// @Failure			500		{object}	dto.ErrorResponse
+func editUser(ctx *gin.Context) {
+	var body dto.EditUser
+	if err := ctx.ShouldBindWith(&body, binding.FormMultipart); err != nil {
+		log.Println(err.Error())
+		ctx.JSON(http.StatusInternalServerError, dto.Response{
+			Success: false,
+			Msg:     "terjadi kesalahan sistem",
 		})
+		return
+	}
+
+	log.Println("size", body.Image.Size)
+
+	// validasi ekstensi (jpg, jpeg, png)
+	// validasi ukuran (ex. max 2MB)
+
+	filename := fmt.Sprintf("%d_%s%s", time.Now().UnixNano(), body.Name, path.Ext(body.Image.Filename))
+	filepath := path.Join("public", "img", filename)
+
+	if err := ctx.SaveUploadedFile(body.Image, filepath); err != nil {
+		log.Println(err.Error())
+		ctx.JSON(http.StatusInternalServerError, dto.Response{
+			Success: false,
+			Msg:     "terjadi kesalahan sistem",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, dto.Response{
+		Success: true,
+		Data: gin.H{
+			"filepath": fmt.Sprintf("img/%s", filename),
+		},
 	})
 }
