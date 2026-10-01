@@ -13,11 +13,12 @@ import (
 	_ "github.com/kodacampmain/koda-b9-gin/docs"
 	"github.com/kodacampmain/koda-b9-gin/internal/dto"
 	"github.com/kodacampmain/koda-b9-gin/internal/middleware"
+	"github.com/redis/go-redis/v9"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
+func InitMainRouter(router *gin.Engine, db *pgxpool.Pool, rdb *redis.Client) {
 	// global middleware
 	// router.Use(middleware.M2, middleware.M1, middleware.M3)
 	router.Use(middleware.Cors)
@@ -29,7 +30,7 @@ func InitMainRouter(router *gin.Engine, db *pgxpool.Pool) {
 
 	initPingRouter(router)
 	initHeaderRouter(router)
-	initPersonRouter(router, db)
+	initPersonRouter(router, db, rdb)
 	initAuthRouter(router, db)
 	initMoviesRouter(router, db)
 

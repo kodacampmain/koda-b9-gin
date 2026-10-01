@@ -46,11 +46,25 @@ func main() {
 
 	log.Println("Database Ready")
 
+	// Connect ke Redis
+	rc := config.NewRedisClient(os.Getenv("RBD_USER"), os.Getenv("RDB_PASS"), os.Getenv("RDB_HOST"), os.Getenv("RDB_PORT"))
+
+	rdb := rc.Connect()
+
+	defer rdb.Close()
+
+	if err := rdb.Ping(context.Background()).Err(); err != nil {
+		log.Println("Redis is not ready\nReason: ", err.Error())
+		return
+	}
+
+	log.Println("Redis Ready")
+
 	// Generate gin Engine
 	r := gin.Default()
 
 	// Deklarasi Router (endpoint & method HTTP)
-	router.InitMainRouter(r, pool)
+	router.InitMainRouter(r, pool, rdb)
 
 	r.Run(fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT")))
 }
