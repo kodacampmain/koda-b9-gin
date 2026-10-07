@@ -18,3 +18,8 @@ print-db-url:
 
 seed-persons:
 	@psql $(DB_URL) < $(SEEDER_PATH)/001_persons.sql
+
+list-files:
+	@for file in $(wildcard $(SEEDER_PATH)/*.sql); do \
+	cat $$file; \
+	done
