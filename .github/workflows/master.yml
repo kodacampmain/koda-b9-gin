@@ -1,0 +1,20 @@
+name: mastering github action
+on:
+  # event
+  push:
+    branches: master
+jobs:
+  # job
+  hello:
+    # runner
+    runs-on: ubuntu-24.04
+    steps:
+      # step
+      - name: whoami
+        run: echo "i am ${{ github.repository_owner }}"
+
+      - name: cloning repo
+        run: |
+          git clone ${{ github.repositoryUrl }} project
+          cd project
+          ls
