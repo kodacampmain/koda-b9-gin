@@ -1,0 +1,17 @@
+name: testing github action
+on:
+  # event
+  push:
+    branches: cicd
+jobs:
+  # job
+  hello:
+    # runner
+    runs-on: ubuntu-24.04
+    steps:
+      # step
+      - name: say hello to the world
+        run: echo "hello world"
+
+      - name: whoami
+        run: echo "i am ${{ github.actor }}"
