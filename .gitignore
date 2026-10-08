@@ -4,5 +4,8 @@
 tmp
 
 .env*
+!.env.example
 
 public
+
+Dockerfile
