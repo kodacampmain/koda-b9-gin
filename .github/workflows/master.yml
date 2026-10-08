@@ -14,6 +14,6 @@ jobs:
         run: echo "i am ${{ github.repository_owner }}"
 
       - name: cloning repo
-        uses: action/checkout@v7
+        uses: actions/checkout@v7
 
       - run: ls
