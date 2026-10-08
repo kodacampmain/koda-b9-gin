@@ -27,7 +27,7 @@ func main() {
 	// load env seawal mungkin
 	if err := godotenv.Load(); err != nil {
 		log.Println(err.Error())
-		return
+		// return
 	}
 
 	// connect ke DB
