@@ -81,6 +81,20 @@ const docTemplate = `{
                     "person"
                 ],
                 "summary": "Getting All Person Data",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

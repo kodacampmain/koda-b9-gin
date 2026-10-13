@@ -13,8 +13,8 @@ import (
 func initPersonRouter(r *gin.Engine, db *pgxpool.Pool, rdb *redis.Client) {
 	personRouter := r.Group("/person")
 
-	pr := repo.NewPersonRepo(db)
-	ps := service.NewPersonService(pr, rdb)
+	pr := repo.NewPersonRepo()
+	ps := service.NewPersonService(pr, rdb, db)
 	ph := handler.NewPersonHandler(ps)
 
 	personRouter.GET("", middleware.CheckToken, middleware.AdminOnly, ph.GetAllPerson)

@@ -74,6 +74,15 @@ paths:
   /person:
     get:
       description: Get all person data from database
+      parameters:
+      - description: limit per page
+        in: query
+        name: limit
+        type: integer
+      - description: page number
+        in: query
+        name: page
+        type: integer
       produces:
       - application/json
       responses:

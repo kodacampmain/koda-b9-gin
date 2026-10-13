@@ -5,25 +5,22 @@ import (
 	"errors"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	apperror "github.com/kodacampmain/koda-b9-gin/internal/error"
 	"github.com/kodacampmain/koda-b9-gin/internal/model"
 )
 
 type PersonRepo struct {
-	db *pgxpool.Pool
 }
 
-func NewPersonRepo(db *pgxpool.Pool) *PersonRepo {
-	return &PersonRepo{
-		db: db,
-	}
+func NewPersonRepo() *PersonRepo {
+	return &PersonRepo{}
 }
 
-func (p *PersonRepo) GetAllPerson(ctx context.Context) ([]model.Person, error) {
+func (p *PersonRepo) GetAllPerson(ctx context.Context, db DBTX, limit, offset int) ([]model.Person, error) {
 	// Jalankan Query
-	sql := "SELECT name, age FROM persons"
-	rows, err := p.db.Query(ctx, sql)
+	sql := "SELECT name, age FROM persons LIMIT $1 OFFSET $2"
+	args := []any{limit, offset}
+	rows, err := db.Query(ctx, sql, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -43,14 +40,23 @@ func (p *PersonRepo) GetAllPerson(ctx context.Context) ([]model.Person, error) {
 	return persons, nil
 }
 
-func (p *PersonRepo) GetPersonById(ctx context.Context, id int) (model.Person, error) {
+func (P *PersonRepo) GetAllPersonMetadata(ctx context.Context, db DBTX) (int, error) {
+	sql := "SELECT COUNT(id) FROM persons"
+	var count int
+	if err := db.QueryRow(ctx, sql).Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func (p *PersonRepo) GetPersonById(ctx context.Context, db DBTX, id int) (model.Person, error) {
 	// SQL injection
 	// sql := fmt.Sprintf("SELECT id, name, age FROM persons WHERE id=%s", id)
 	sql := "SELECT id, name, age FROM persons WHERE id=$1"
 	// $ => Parameterized Query untuk PSQL
 	// Parameterized Query di psql dibaca berdasarkan posisi
 	args := []any{id}
-	row := p.db.QueryRow(ctx, sql, args...)
+	row := db.QueryRow(ctx, sql, args...)
 	var person model.Person
 	if err := row.Scan(&person.Id, &person.Name, &person.Age); err != nil {
 		// Expected Error
@@ -63,12 +69,12 @@ func (p *PersonRepo) GetPersonById(ctx context.Context, id int) (model.Person, e
 	return person, nil
 }
 
-func (p *PersonRepo) CreateNewPerson(ctx context.Context, newPerson model.Person) error {
+func (p *PersonRepo) CreateNewPerson(ctx context.Context, db DBTX, newPerson model.Person) error {
 	sql := "INSERT INTO persons (name, age) VALUES ($1,$2)"
 	// sql := "INSERT INTO persons (name, age) VALUES ($1,$2) RETURNING id, name, age"
 	// krn returning maka ada row result, jadi gunakan query atau queryrow berdasarkan ekspektasi output
 	args := []any{newPerson.Name, newPerson.Age}
-	cmd, err := p.db.Exec(ctx, sql, args...)
+	cmd, err := db.Exec(ctx, sql, args...)
 	if err != nil {
 		return err
 	}
